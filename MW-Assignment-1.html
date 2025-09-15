@@ -352,50 +352,251 @@ display: none;
 </div>
 
 
-<p>#Title-Assignment 1-Marzan Wahab library(readr) Cereals &lt;-
-read_csv(“Cereals.csv”) View(Cereals) # Dataset provided from course
-module</p>
-<div id="print-out-descriptive-stats-for-categorical-variables" class="section level1">
-<h1>Print out descriptive stats for categorical variables</h1>
-<p>table(Cereals<span class="math inline">\(mfr)
-# Table output
-#A  G  K  N  P  Q  R
-#1 22 23  6  9  8  8
-table(Cereals\)</span>type) #Table outout #C H #74 3</p>
-</div>
-<div id="print-out-descriptive-statistics-for-quantitative-var-sugarsfats" class="section level1">
-<h1>print out descriptive statistics for quantitative var
-(sugars,fats)</h1>
-<p>print(“summary of sugars and fats”)
-summary(Cereals[,c(“sugars”,“fat”)]) #table Output # sugars fat<br />
-# Min. : 0.000 Min. :0.000<br />
-#1st Qu.: 3.000 1st Qu.:0.000<br />
-#Median : 7.000 Median :1.000<br />
-#Mean : 7.026 Mean :1.013<br />
-#3rd Qu.:11.000 3rd Qu.:2.000<br />
-#Max. :15.000 Max. :5.000<br />
-#NA’s :1</p>
-<p>#summarize quantatitive var by group category(mfr) cal mean- dplyr
-Cereals %&gt;% group_by(mfr) %&gt;% summarise( count=n(),
-sugars=mean(sugars,na.rm=TRUE), fat=mean(fat,na.rm=TRUE),
-calories=mean(calories,na.rm=TRUE) ) #table output # A tibble: 7 × 5 #
-mfr count sugars fat calories #<chr> <int> <dbl> <dbl> <dbl> #1 A 1 3 1
-100<br />
-#2 G 22 7.95 1.36 111. #3 K 23 7.57 0.609 109. #4 N 6 1.83 0.167 86.7 #5
-P 9 8.78 0.889 109. #6 Q 8 6.14 1.75 95<br />
-#7 R 8 6.12 1.25 115</p>
-<p>#summarize quantatitive var by group category(mfr) cal median-dplyr
-Cereals %&gt;% group_by(mfr) %&gt;% summarise( count=n(), sugars=median
-(sugars,na.rm=TRUE), fat=median(fat,na.rm=TRUE),
-calories=median(calories,na.rm=TRUE) ) #Table output # A tibble: 7 × 5
-#mfr count sugars fat calories #<chr> <int> <dbl> <dbl> <dbl> #1 A 1 3 1
-100 #2 G 22 8.5 1 110 #3 K 23 7 0 110 #4 N 6 0 0 90 #5 P 9 10 1 110 #6 Q
-8 6 2 100 #7 R 8 5.5 1 110</p>
-<p>#Transformed Calories variable by adding colum
-Cereals&lt;-transform(Cereals, calories_level=ifelse(calories&gt;=90,
-“High”,“Low”)) print(Cereals)</p>
-<p>#plot Data-one quantative and one scatter plot plot(Cereals<span class="math inline">\(calories,Cereals\)</span>sugars, main = “Sugar and
-Calories”, xlab = “Calories”, ylab = “Sugars”, pch=20)</p>
+<p>#Title-Assignment 1-Marzan Wahab</p>
+<p>** loading library**</p>
+<pre class="r"><code>library(readr)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div id="reading-csv-file-and-showing-raw-data" class="section level1">
+<h1>Reading CSV file and Showing raw data</h1>
+<pre class="r"><code>Cereals &lt;- read_csv(&quot;Cereals.csv&quot;)</code></pre>
+<pre><code>## Rows: 77 Columns: 16
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): name, mfr, type
+## dbl (13): calories, protein, fat, sodium, fiber, carbo, sugars, potass, vita...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>View(Cereals) </code></pre>
+<p>#outputs</p>
+<pre class="r"><code>table(Cereals$mfr)</code></pre>
+<pre><code>## 
+##  A  G  K  N  P  Q  R 
+##  1 22 23  6  9  8  8</code></pre>
+<pre class="r"><code>table(Cereals$type)</code></pre>
+<pre><code>## 
+##  C  H 
+## 74  3</code></pre>
+<pre class="r"><code>print(&quot;summary of sugars and fats&quot;)</code></pre>
+<pre><code>## [1] &quot;summary of sugars and fats&quot;</code></pre>
+<pre class="r"><code>summary(Cereals[,c(&quot;sugars&quot;,&quot;fat&quot;)])</code></pre>
+<pre><code>##      sugars            fat       
+##  Min.   : 0.000   Min.   :0.000  
+##  1st Qu.: 3.000   1st Qu.:0.000  
+##  Median : 7.000   Median :1.000  
+##  Mean   : 7.026   Mean   :1.013  
+##  3rd Qu.:11.000   3rd Qu.:2.000  
+##  Max.   :15.000   Max.   :5.000  
+##  NA&#39;s   :1</code></pre>
+<pre class="r"><code>Cereals %&gt;%
+  group_by(mfr) %&gt;%
+  summarise(
+    count=n(),
+    sugars=mean(sugars,na.rm=TRUE),
+    fat=mean(fat,na.rm=TRUE),
+    calories=mean(calories,na.rm=TRUE)
+     )</code></pre>
+<pre><code>## # A tibble: 7 × 5
+##   mfr   count sugars   fat calories
+##   &lt;chr&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1 A         1   3    1        100  
+## 2 G        22   7.95 1.36     111. 
+## 3 K        23   7.57 0.609    109. 
+## 4 N         6   1.83 0.167     86.7
+## 5 P         9   8.78 0.889    109. 
+## 6 Q         8   6.14 1.75      95  
+## 7 R         8   6.12 1.25     115</code></pre>
+<pre class="r"><code>Cereals %&gt;%
+  group_by(mfr) %&gt;%
+  summarise(
+    count=n(),
+    sugars=median (sugars,na.rm=TRUE),
+    fat=median(fat,na.rm=TRUE),
+    calories=median(calories,na.rm=TRUE)
+     )</code></pre>
+<pre><code>## # A tibble: 7 × 5
+##   mfr   count sugars   fat calories
+##   &lt;chr&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1 A         1    3       1      100
+## 2 G        22    8.5     1      110
+## 3 K        23    7       0      110
+## 4 N         6    0       0       90
+## 5 P         9   10       1      110
+## 6 Q         8    6       2      100
+## 7 R         8    5.5     1      110</code></pre>
+<pre class="r"><code>Cereals&lt;-transform(Cereals,
+                   calories_level=ifelse(calories&gt;=90, &quot;High&quot;,&quot;Low&quot;))
+print(Cereals)</code></pre>
+<pre><code>##                                      name mfr type calories protein fat sodium
+## 1                               100%_Bran   N    C       70       4   1    130
+## 2                       100%_Natural_Bran   Q    C      120       3   5     15
+## 3                                All-Bran   K    C       70       4   1    260
+## 4               All-Bran_with_Extra_Fiber   K    C       50       4   0    140
+## 5                          Almond_Delight   R    C      110       2   2    200
+## 6                 Apple_Cinnamon_Cheerios   G    C      110       2   2    180
+## 7                             Apple_Jacks   K    C      110       2   0    125
+## 8                                 Basic_4   G    C      130       3   2    210
+## 9                               Bran_Chex   R    C       90       2   1    200
+## 10                            Bran_Flakes   P    C       90       3   0    210
+## 11                           Cap&#39;n&#39;Crunch   Q    C      120       1   2    220
+## 12                               Cheerios   G    C      110       6   2    290
+## 13                  Cinnamon_Toast_Crunch   G    C      120       1   3    210
+## 14                               Clusters   G    C      110       3   2    140
+## 15                            Cocoa_Puffs   G    C      110       1   1    180
+## 16                              Corn_Chex   R    C      110       2   0    280
+## 17                            Corn_Flakes   K    C      100       2   0    290
+## 18                              Corn_Pops   K    C      110       1   0     90
+## 19                          Count_Chocula   G    C      110       1   1    180
+## 20                     Cracklin&#39;_Oat_Bran   K    C      110       3   3    140
+## 21                 Cream_of_Wheat_(Quick)   N    H      100       3   0     80
+## 22                                Crispix   K    C      110       2   0    220
+## 23                 Crispy_Wheat_&amp;_Raisins   G    C      100       2   1    140
+## 24                            Double_Chex   R    C      100       2   0    190
+## 25                            Froot_Loops   K    C      110       2   1    125
+## 26                         Frosted_Flakes   K    C      110       1   0    200
+## 27                    Frosted_Mini-Wheats   K    C      100       3   0      0
+## 28 Fruit_&amp;_Fibre_Dates,_Walnuts,_and_Oats   P    C      120       3   2    160
+## 29                          Fruitful_Bran   K    C      120       3   0    240
+## 30                         Fruity_Pebbles   P    C      110       1   1    135
+## 31                           Golden_Crisp   P    C      100       2   0     45
+## 32                         Golden_Grahams   G    C      110       1   1    280
+## 33                      Grape_Nuts_Flakes   P    C      100       3   1    140
+## 34                             Grape-Nuts   P    C      110       3   0    170
+## 35                     Great_Grains_Pecan   P    C      120       3   3     75
+## 36                       Honey_Graham_Ohs   Q    C      120       1   2    220
+## 37                     Honey_Nut_Cheerios   G    C      110       3   1    250
+## 38                             Honey-comb   P    C      110       1   0    180
+## 39            Just_Right_Crunchy__Nuggets   K    C      110       2   1    170
+## 40                 Just_Right_Fruit_&amp;_Nut   K    C      140       3   1    170
+## 41                                    Kix   G    C      110       2   1    260
+## 42                                   Life   Q    C      100       4   2    150
+## 43                           Lucky_Charms   G    C      110       2   1    180
+## 44                                  Maypo   A    H      100       4   1      0
+## 45       Muesli_Raisins,_Dates,_&amp;_Almonds   R    C      150       4   3     95
+## 46      Muesli_Raisins,_Peaches,_&amp;_Pecans   R    C      150       4   3    150
+## 47                   Mueslix_Crispy_Blend   K    C      160       3   2    150
+## 48                   Multi-Grain_Cheerios   G    C      100       2   1    220
+## 49                       Nut&amp;Honey_Crunch   K    C      120       2   1    190
+## 50              Nutri-Grain_Almond-Raisin   K    C      140       3   2    220
+## 51                      Nutri-grain_Wheat   K    C       90       3   0    170
+## 52                   Oatmeal_Raisin_Crisp   G    C      130       3   2    170
+## 53                  Post_Nat._Raisin_Bran   P    C      120       3   1    200
+## 54                             Product_19   K    C      100       3   0    320
+## 55                            Puffed_Rice   Q    C       50       1   0      0
+## 56                           Puffed_Wheat   Q    C       50       2   0      0
+## 57                     Quaker_Oat_Squares   Q    C      100       4   1    135
+## 58                         Quaker_Oatmeal   Q    H      100       5   2      0
+## 59                            Raisin_Bran   K    C      120       3   1    210
+## 60                        Raisin_Nut_Bran   G    C      100       3   2    140
+## 61                         Raisin_Squares   K    C       90       2   0      0
+## 62                              Rice_Chex   R    C      110       1   0    240
+## 63                          Rice_Krispies   K    C      110       2   0    290
+## 64                         Shredded_Wheat   N    C       80       2   0      0
+## 65                 Shredded_Wheat_&#39;n&#39;Bran   N    C       90       3   0      0
+## 66              Shredded_Wheat_spoon_size   N    C       90       3   0      0
+## 67                                 Smacks   K    C      110       2   1     70
+## 68                              Special_K   K    C      110       6   0    230
+## 69                Strawberry_Fruit_Wheats   N    C       90       2   0     15
+## 70                      Total_Corn_Flakes   G    C      110       2   1    200
+## 71                      Total_Raisin_Bran   G    C      140       3   1    190
+## 72                      Total_Whole_Grain   G    C      100       3   1    200
+## 73                                Triples   G    C      110       2   1    250
+## 74                                   Trix   G    C      110       1   1    140
+## 75                             Wheat_Chex   R    C      100       3   1    230
+## 76                               Wheaties   G    C      100       3   1    200
+## 77                    Wheaties_Honey_Gold   G    C      110       2   1    200
+##    fiber carbo sugars potass vitamins shelf weight cups   rating calories_level
+## 1   10.0   5.0      6    280       25     3   1.00 0.33 68.40297            Low
+## 2    2.0   8.0      8    135        0     3   1.00 1.00 33.98368           High
+## 3    9.0   7.0      5    320       25     3   1.00 0.33 59.42551            Low
+## 4   14.0   8.0      0    330       25     3   1.00 0.50 93.70491            Low
+## 5    1.0  14.0      8     NA       25     3   1.00 0.75 34.38484           High
+## 6    1.5  10.5     10     70       25     1   1.00 0.75 29.50954           High
+## 7    1.0  11.0     14     30       25     2   1.00 1.00 33.17409           High
+## 8    2.0  18.0      8    100       25     3   1.33 0.75 37.03856           High
+## 9    4.0  15.0      6    125       25     1   1.00 0.67 49.12025           High
+## 10   5.0  13.0      5    190       25     3   1.00 0.67 53.31381           High
+## 11   0.0  12.0     12     35       25     2   1.00 0.75 18.04285           High
+## 12   2.0  17.0      1    105       25     1   1.00 1.25 50.76500           High
+## 13   0.0  13.0      9     45       25     2   1.00 0.75 19.82357           High
+## 14   2.0  13.0      7    105       25     3   1.00 0.50 40.40021           High
+## 15   0.0  12.0     13     55       25     2   1.00 1.00 22.73645           High
+## 16   0.0  22.0      3     25       25     1   1.00 1.00 41.44502           High
+## 17   1.0  21.0      2     35       25     1   1.00 1.00 45.86332           High
+## 18   1.0  13.0     12     20       25     2   1.00 1.00 35.78279           High
+## 19   0.0  12.0     13     65       25     2   1.00 1.00 22.39651           High
+## 20   4.0  10.0      7    160       25     3   1.00 0.50 40.44877           High
+## 21   1.0  21.0      0     NA        0     2   1.00 1.00 64.53382           High
+## 22   1.0  21.0      3     30       25     3   1.00 1.00 46.89564           High
+## 23   2.0  11.0     10    120       25     3   1.00 0.75 36.17620           High
+## 24   1.0  18.0      5     80       25     3   1.00 0.75 44.33086           High
+## 25   1.0  11.0     13     30       25     2   1.00 1.00 32.20758           High
+## 26   1.0  14.0     11     25       25     1   1.00 0.75 31.43597           High
+## 27   3.0  14.0      7    100       25     2   1.00 0.80 58.34514           High
+## 28   5.0  12.0     10    200       25     3   1.25 0.67 40.91705           High
+## 29   5.0  14.0     12    190       25     3   1.33 0.67 41.01549           High
+## 30   0.0  13.0     12     25       25     2   1.00 0.75 28.02576           High
+## 31   0.0  11.0     15     40       25     1   1.00 0.88 35.25244           High
+## 32   0.0  15.0      9     45       25     2   1.00 0.75 23.80404           High
+## 33   3.0  15.0      5     85       25     3   1.00 0.88 52.07690           High
+## 34   3.0  17.0      3     90       25     3   1.00 0.25 53.37101           High
+## 35   3.0  13.0      4    100       25     3   1.00 0.33 45.81172           High
+## 36   1.0  12.0     11     45       25     2   1.00 1.00 21.87129           High
+## 37   1.5  11.5     10     90       25     1   1.00 0.75 31.07222           High
+## 38   0.0  14.0     11     35       25     1   1.00 1.33 28.74241           High
+## 39   1.0  17.0      6     60      100     3   1.00 1.00 36.52368           High
+## 40   2.0  20.0      9     95      100     3   1.30 0.75 36.47151           High
+## 41   0.0  21.0      3     40       25     2   1.00 1.50 39.24111           High
+## 42   2.0  12.0      6     95       25     2   1.00 0.67 45.32807           High
+## 43   0.0  12.0     12     55       25     2   1.00 1.00 26.73451           High
+## 44   0.0  16.0      3     95       25     2   1.00 1.00 54.85092           High
+## 45   3.0  16.0     11    170       25     3   1.00 1.00 37.13686           High
+## 46   3.0  16.0     11    170       25     3   1.00 1.00 34.13976           High
+## 47   3.0  17.0     13    160       25     3   1.50 0.67 30.31335           High
+## 48   2.0  15.0      6     90       25     1   1.00 1.00 40.10596           High
+## 49   0.0  15.0      9     40       25     2   1.00 0.67 29.92429           High
+## 50   3.0  21.0      7    130       25     3   1.33 0.67 40.69232           High
+## 51   3.0  18.0      2     90       25     3   1.00 1.00 59.64284           High
+## 52   1.5  13.5     10    120       25     3   1.25 0.50 30.45084           High
+## 53   6.0  11.0     14    260       25     3   1.33 0.67 37.84059           High
+## 54   1.0  20.0      3     45      100     3   1.00 1.00 41.50354           High
+## 55   0.0  13.0      0     15        0     3   0.50 1.00 60.75611            Low
+## 56   1.0  10.0      0     50        0     3   0.50 1.00 63.00565            Low
+## 57   2.0  14.0      6    110       25     3   1.00 0.50 49.51187           High
+## 58   2.7    NA     NA    110        0     1   1.00 0.67 50.82839           High
+## 59   5.0  14.0     12    240       25     2   1.33 0.75 39.25920           High
+## 60   2.5  10.5      8    140       25     3   1.00 0.50 39.70340           High
+## 61   2.0  15.0      6    110       25     3   1.00 0.50 55.33314           High
+## 62   0.0  23.0      2     30       25     1   1.00 1.13 41.99893           High
+## 63   0.0  22.0      3     35       25     1   1.00 1.00 40.56016           High
+## 64   3.0  16.0      0     95        0     1   0.83 1.00 68.23588            Low
+## 65   4.0  19.0      0    140        0     1   1.00 0.67 74.47295           High
+## 66   3.0  20.0      0    120        0     1   1.00 0.67 72.80179           High
+## 67   1.0   9.0     15     40       25     2   1.00 0.75 31.23005           High
+## 68   1.0  16.0      3     55       25     1   1.00 1.00 53.13132           High
+## 69   3.0  15.0      5     90       25     2   1.00 1.00 59.36399           High
+## 70   0.0  21.0      3     35      100     3   1.00 1.00 38.83975           High
+## 71   4.0  15.0     14    230      100     3   1.50 1.00 28.59278           High
+## 72   3.0  16.0      3    110      100     3   1.00 1.00 46.65884           High
+## 73   0.0  21.0      3     60       25     3   1.00 0.75 39.10617           High
+## 74   0.0  13.0     12     25       25     2   1.00 1.00 27.75330           High
+## 75   3.0  17.0      3    115       25     1   1.00 0.67 49.78744           High
+## 76   3.0  17.0      3    110       25     1   1.00 1.00 51.59219           High
+## 77   1.0  16.0      8     60       25     1   1.00 0.75 36.18756           High</code></pre>
+<pre class="r"><code>plot(Cereals$calories,Cereals$sugars,
+     main = &quot;Sugar and Calories&quot;,
+     xlab = &quot;Calories&quot;,
+     ylab = &quot;Sugars&quot;,
+     pch=20)</code></pre>
+<p><img role="img" src="data:image/png;base64,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" width="672" /></p>
 </div>
 
 
